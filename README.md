@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="mission-control.png" alt="Mission Control" width="600" />
-</p>
-
 <h1 align="center">🦞 Mission Control</h1>
 
 <p align="center">
