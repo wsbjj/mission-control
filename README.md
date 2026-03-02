@@ -1,4 +1,9 @@
-<h1 align="center">🦞 Mission Control</h1>
+<h1 align="center">Autensa</h1>
+
+<p align="center">
+  <em>Formerly known as Mission Control</em><br>
+  <a href="https://autensa.com">autensa.com</a>
+</p>
 
 <p align="center">
   <strong>AI Agent Orchestration Dashboard</strong><br>
