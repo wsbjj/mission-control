@@ -190,7 +190,7 @@ export function PlanningTab({ taskId, onSpecLocked }: PlanningTabProps) {
 
     // Soft warning at 90s, but keep polling so long responses can still complete
     pollingWarningTimeoutRef.current = setTimeout(() => {
-      setError('The orchestrator is still processing. You can refresh safely — you will not lose your place in Planning Mode.');
+      setError(t('planningOrchestratorWarning'));
     }, 90000);
 
     // Hard timeout at 5 minutes to avoid infinite wait states
@@ -198,9 +198,9 @@ export function PlanningTab({ taskId, onSpecLocked }: PlanningTabProps) {
       stopPolling();
       setSubmitting(false);
       setIsSubmittingAnswer(false);
-      setError('The orchestrator timed out after an extended wait. Please refresh the page and retry your last answer.');
+      setError(t('planningOrchestratorTimeout'));
     }, 300000);
-  }, [pollForUpdates, stopPolling]);
+  }, [pollForUpdates, stopPolling, t]);
 
   // Update currentQuestion ref when state changes
   useEffect(() => {
