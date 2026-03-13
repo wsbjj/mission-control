@@ -77,7 +77,7 @@ export function TeamTab({ taskId, workspaceId }: TeamTabProps) {
         .map((s: WorkflowStage) => normalizeRole(s.role as string))
     : [];
 
-  // Unique roles (remove duplicates + normalize case)
+  // Unique roles (remove duplicates + normalize case) for workflow templates
   const uniqueRoles = Array.from(new Set(requiredRoles));
 
   const handleWorkflowChange = async (templateId: string) => {
@@ -228,6 +228,19 @@ export function TeamTab({ taskId, workspaceId }: TeamTabProps) {
 
   const addableRoles = roleCatalog.filter(role => !assignedRoleNames.includes(role));
 
+  // For display: when a workflow is active, show workflow roles first and
+  // extra custom roles in a separate section. When there is no workflow
+  // selected, show each normalized role only once.
+  const displayRoles = uniqueRoles.length > 0
+    ? uniqueRoles
+    : Array.from(
+        new Set(
+          roles
+            .map(r => normalizeRole(r.role))
+            .filter(Boolean)
+        )
+      );
+
   return (
     <div className="space-y-6">
       {/* Workflow Template Selector */}
@@ -292,7 +305,7 @@ export function TeamTab({ taskId, workspaceId }: TeamTabProps) {
       <div>
         <label className="block text-sm font-medium mb-2">{t('teamRoleAssignments')}</label>
         <div className="space-y-3">
-          {(uniqueRoles.length > 0 ? uniqueRoles : roles.map(r => r.role).filter(Boolean)).map(role => {
+        {displayRoles.map(role => {
             if (!role) return null;
             const assignment = roles.find(r => normalizeRole(r.role) === normalizeRole(role));
             return (
@@ -316,8 +329,8 @@ export function TeamTab({ taskId, workspaceId }: TeamTabProps) {
             );
           })}
 
-          {/* Custom role slots (not from workflow) - role names are catalog-driven (not editable text) */}
-          {roles.filter(r => !uniqueRoles.includes(normalizeRole(r.role)) && r.role).map((r, i) => (
+          {/* Custom role slots (not from workflow) - only shown when a workflow is active */}
+          {uniqueRoles.length > 0 && roles.filter(r => !uniqueRoles.includes(normalizeRole(r.role)) && r.role).map((r, i) => (
               <div key={`custom-${i}`} className="flex items-center gap-3">
               <div className="w-24 text-xs font-medium text-mc-text-secondary capitalize flex-shrink-0">
                 {translateRoleName(normalizeRole(r.role))}
